@@ -1,0 +1,1 @@
+javascript:console.log('Links on this Page:\n' + Array.from(document.querySelectorAll('a')).map(link => link.href).join('\n'));
