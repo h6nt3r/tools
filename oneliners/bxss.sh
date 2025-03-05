@@ -48,6 +48,8 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/tomnomnom/anew@latest
     echo "bxss=================================="
     go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
     echo "gau===================================="
     go install github.com/lc/gau/v2/cmd/gau@latest
     mv ~/go/bin/* /usr/local/bin/
