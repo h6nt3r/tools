@@ -49,7 +49,9 @@ if [[ "$1" == "-c" ]]; then
     echo "bxss=================================="
     go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    sudo apt install ./google-chrome-stable*.deb -y
+    sudo apt --fix-broken install -y
+    sudo apt install ./google-chrome-stable*.deb -y
     echo "urlfinder===================================="
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
