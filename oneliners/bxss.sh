@@ -22,7 +22,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "anew" "qsreplace" "bxss" "gau")
+    tools=( "anew" "qsreplace" "bxss" "urlfinder" "google-chrome")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -50,8 +50,9 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dpkg -i google-chrome-stable_current_amd64.deb
-    echo "gau===================================="
-    go install github.com/lc/gau/v2/cmd/gau@latest
+    echo "urlfinder===================================="
+    go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
+    wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
     mv ~/go/bin/* /usr/local/bin/
     exit 0
 fi
@@ -69,7 +70,7 @@ fi
 if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,;s,www\.,,')
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan | grep -avE '\.js($|\s|\?|&|#|/|\.)|\.json($|\s|\?|&|#|/|\.)\.css($|\s|\?|&|#|/|\.)' | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxss.txt
+    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -77,5 +78,5 @@ fi
 if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,;s,www\.,,')
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan | grep -avE '\.js($|\s|\?|&|#|/|\.)|\.json($|\s|\?|&|#|/|\.)\.css($|\s|\?|&|#|/|\.)' | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxss.txt
+    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
 fi
