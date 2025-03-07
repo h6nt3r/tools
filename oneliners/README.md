@@ -17,5 +17,7 @@ sudo apt install ./google-chrome*.deb -y
 ## usage
 ```
 ./bxss.sh -d "http://testphp.vulnweb.com"
+```
+```
 ./bxss.sh -l "http://vulnweb.com"
 ```
