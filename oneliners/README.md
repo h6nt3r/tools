@@ -21,3 +21,6 @@ sudo apt install ./google-chrome*.deb -y
 ```
 ./bxss.sh -l "http://vulnweb.com"
 ```
+```
+sudo apt --fix-broken install -y
+```
