@@ -9,7 +9,13 @@ sudo chmod +x ./sqli.sh
 wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bxss.sh"
 sudo chmod +x ./bxss.sh
 ./bxss.sh -h
---------------------------------------
+```
+
+```
+sudo apt install ./google-chrome*.deb -y
+```
+## usage
+```
 ./bxss.sh -d "http://testphp.vulnweb.com"
 ./bxss.sh -l "http://vulnweb.com"
 ```
