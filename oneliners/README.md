@@ -12,7 +12,7 @@ sudo chmod +x ./bxss.sh
 ```
 
 ```
-sudo apt install ./google-chrome*.deb -y
+sudo apt install ./google-chrome-stable*.deb -y
 ```
 ## usage
 ```
