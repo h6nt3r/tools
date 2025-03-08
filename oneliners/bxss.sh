@@ -67,7 +67,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -parameters -payloadFile xssBlind.txt -header "User-Agent"
+    echo "$domain" | bxss -parameters -payloadFile xssBlind.txt
 fi
 
 
@@ -75,7 +75,7 @@ fi
 if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,;s,www\.,,')
-    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt -header "User-Agent"
+    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -83,5 +83,5 @@ fi
 if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,;s,www\.,,')
-    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt -header "User-Agent"
+    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
 fi
