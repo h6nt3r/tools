@@ -57,6 +57,7 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/xssBlind.txt"
+    sudo rm -r google-chrome-stable_current_amd64.deb.* bxssMostUsed.txt.* xssBlind.txt.*
     mv ~/go/bin/* /usr/local/bin/
     exit 0
 fi
