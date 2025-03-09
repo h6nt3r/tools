@@ -24,3 +24,9 @@ sudo apt install ./google-chrome-stable*.deb -y
 ```
 sudo apt --fix-broken install -y
 ```
+## Lostfuzzer
+### Install
+```
+wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/lostfuzzer.sh"
+sudo chmod +x ./lostfuzzer.sh
+```
