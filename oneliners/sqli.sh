@@ -86,7 +86,7 @@ fi
 # Error based
 if [[ "$1" == "-d" && "$3" == "-e" ]]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
-    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all -silent | uro | httpx -silent | nuclei -t pvtTemplate/ -tags esqli -dast | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all -silent | uro | httpx -silent | nuclei -t pvtTemplate/ -tags esqli -dast -duc | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
@@ -119,7 +119,7 @@ fi
 # Error based
 if [[ "$1" == "-l" && "$3" == "-e" ]]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
-    urlfinder -d "$domain_Without_Protocol" -all -silent | uro | httpx -silent | nuclei -t pvtTemplate/ -tags esqli -dast | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+    urlfinder -d "$domain_Without_Protocol" -all -silent | uro | httpx -silent | nuclei -t pvtTemplate/ -tags esqli -dast -duc | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
