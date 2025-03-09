@@ -4,6 +4,10 @@ wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/s
 sudo chmod +x ./sqli.sh
 ./sqli.sh -h
 ```
+```
+./sqli.sh -l "testphp.vulnweb.com" -e
+```
+
 ## Blindxss install
 ```
 wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bxss.sh"
