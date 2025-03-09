@@ -64,7 +64,7 @@ mv "$FILTERED_URLS_FILE.tmp" "$FILTERED_URLS_FILE"
 
 # Step 4: Run nuclei for DAST scanning
 echo -e "${GREEN}[INFO] Running nuclei for DAST scanning...${RESET}"
-nuclei -dast -retries 2 -silent -o "$NUCLEI_RESULTS" < "$FILTERED_URLS_FILE"
+nuclei -t pvtTemplate -tags esqli,exss -dast -retries 2 -silent -o "$NUCLEI_RESULTS" < "$FILTERED_URLS_FILE"
 
 # Step 5: Show saved results
 echo -e "${GREEN}[INFO] Nuclei results saved to $NUCLEI_RESULTS${RESET}"
