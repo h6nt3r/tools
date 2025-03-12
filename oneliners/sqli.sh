@@ -25,7 +25,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "anew" "qsreplace" "ghauri" "urlfinder" "httpx" "uro" "nuclei")
+    tools=( "anew" "qsreplace" "ghauri" "urlfinder" "httpx" "uro")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -51,8 +51,6 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/tomnomnom/anew@latest
     echo "urlfinder===================================="
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
-    echo "nuclei===================================="
-    go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
     echo "httpx===================================="
     go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
     echo "ghauri=================================="
