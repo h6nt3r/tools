@@ -51,8 +51,6 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/tomnomnom/anew@latest
     echo "urlfinder===================================="
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
-    echo "httpx===================================="
-    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
     echo "ghauri=================================="
     cd /opt/ && sudo git clone https://github.com/r0oth3x49/ghauri.git && cd ghauri/
     sudo chmod +x setup.py
@@ -84,7 +82,7 @@ fi
 # Error based
 if [[ "$1" == "-d" && "$3" == "-e" ]]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
-    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | uro | httpx  | nuclei -t pvtTemplate/ -tags esqli -dast -duc | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
@@ -117,7 +115,7 @@ fi
 # Error based
 if [[ "$1" == "-l" && "$3" == "-e" ]]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
-    urlfinder -d "$domain_Without_Protocol" -all  | uro | httpx  | nuclei -t pvtTemplate/ -tags esqli -dast -duc | awk '{print $4}' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+    urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
