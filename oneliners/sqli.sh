@@ -62,8 +62,8 @@ if [[ "$1" == "-c" ]]; then
     cd
     echo "urlfinder===================================="
     pip3 install uro
-    git clone https://github.com/h6nt3r/pvtTemplate.git
-    mv ~/gopath/bin/* /usr/local/bin/
+    sudo rm -r google-chrome-stable_current_amd64.deb.* bxssMostUsed.txt.* xssBlind.txt.*
+    sudo mv ~/gopath/bin/* /usr/local/bin/
     exit 0
 fi
 
