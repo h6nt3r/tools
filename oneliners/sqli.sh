@@ -25,7 +25,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "anew" "qsreplace" "ghauri" "urlfinder" "httpx" "uro")
+    tools=( "anew" "qsreplace" "ghauri" "urlfinder")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
