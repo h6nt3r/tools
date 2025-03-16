@@ -67,14 +67,14 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -parameters -payloadFile xssBlind.txt
+    echo "$domain" | bxss -t -pf xssBlind.txt
 fi
 
 # bxss vulnerability
 if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
+    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -82,5 +82,5 @@ fi
 if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -parameters -payloadFile bxssMostUsed.txt
+    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 fi
