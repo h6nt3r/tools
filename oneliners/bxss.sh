@@ -23,7 +23,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "anew" "qsreplace" "bxss" "urlfinder" "google-chrome")
+    tools=( "anew" "qsreplace" "bxss" "urlfinder" "gau" "google-chrome")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -57,8 +57,13 @@ if [[ "$1" == "-c" ]]; then
     go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/xssBlind.txt"
+    wget "https://github.com/lc/gau/releases/download/v2.2.4/gau_2.2.4_linux_amd64.tar.gz"
+    tar -xzf gau_2.2.4_linux_amd64.tar.gz
+    sudo mv gau /usr/local/bin/
+    sudo rm -r gau_2.2.4_linux_amd64.tar.gz LICENSE README.md
     sudo rm -r google-chrome-stable_current_amd64.deb.* bxssMostUsed.txt.* xssBlind.txt.*
-    mv ~/go/bin/* /usr/local/bin/
+    sudo mv ~/gopath/bin/* /usr/local/bin/
+
     exit 0
 fi
 
@@ -74,7 +79,9 @@ fi
 if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
+    # urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
+
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|pdf|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -82,5 +89,7 @@ fi
 if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
+    # urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
+
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|pdf|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
 fi
