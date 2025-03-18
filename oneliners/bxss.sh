@@ -81,7 +81,7 @@ if [ "$1" == "-d" ]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     # urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|pdf|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -91,5 +91,5 @@ if [ "$1" == "-l" ]; then
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
     # urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|pdf|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | anew | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|gif|zip|mp4|mp3|xml)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
 fi
