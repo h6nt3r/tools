@@ -1,3 +1,11 @@
+### Paramspider for single domain
+```
+urlfinder -d "testphp.vulnweb.com" -fs fqdn -all | grep -aviE "\.(js(on)?|css|jpe?g|png|gif|bmp|tiff?|webp|heifc?|jp[2fxm]|mj2|pcx|dds|raw|dng|cr[23]|nef|a[rw]w|srf?|raf|orf|pef|rw2|svg|eps|ai|exr|hdr|tga|ico|icns|obj|stl|ply|fbx|pict?|xcf|ps[db]|qoi|woff[12]?|eot)($|\s|\?|&|#|/|\.)" | sort -u>params.testphp.vulnweb.com.txt
+```
+### Paramspider for multi domain
+```
+urlfinder -d "testphp.vulnweb.com" -all | grep -aviE "\.(js(on)?|css|jpe?g|png|gif|bmp|tiff?|webp|heifc?|jp[2fxm]|mj2|pcx|dds|raw|dng|cr[23]|nef|a[rw]w|srf?|raf|orf|pef|rw2|svg|eps|ai|exr|hdr|tga|ico|icns|obj|stl|ply|fbx|pict?|xcf|ps[db]|qoi|woff[12]?|eot)($|\s|\?|&|#|/|\.)" | sort -u>params.testphp.vulnweb.com.txt
+```
 ## Params with katana
 
 ```
