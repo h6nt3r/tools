@@ -23,7 +23,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "anew" "qsreplace" "bxss" "urlfinder" "gau" "google-chrome")
+    tools=( "bxss" "urlfinder" "gau" "google-chrome")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -43,10 +43,6 @@ fi
 
 # Check if help is requested
 if [[ "$1" == "-c" ]]; then
-    echo "qsreplace==============================="
-    go install -v github.com/tomnomnom/qsreplace@latest
-    echo "anew===================================="
-    go install -v github.com/tomnomnom/anew@latest
     echo "bxss=================================="
     go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -72,16 +68,15 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -t -pf xssBlind.txt
+    echo "$domain" | bxss -X GET,POST -pf xssBlind.txt
 fi
 
 # bxss vulnerability
 if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    # urlfinder -d "$domain_Without_Protocol" -fs fqdn -all | grep -aviE "\.(js(on)?|css|jpe?g|png|gif|bmp|tiff?|webp|heifc?|jp[2fxm]|mj2|pcx|dds|raw|dng|cr[23]|nef|a[rw]w|srf?|raf|orf|pef|rw2|svg|eps|ai|exr|hdr|tga|ico|icns|obj|stl|ply|fbx|pict?|xcf|ps[db]|qoi|woff[12]?|eot)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | anew | grep -aviE "\.(js(on)?|css|jpe?g|png|gif|bmp|tiff?|webp|heifc?|jp[2fxm]|mj2|pcx|dds|raw|dng|cr[23]|nef|a[rw]w|srf?|raf|orf|pef|rw2|svg|eps|ai|exr|hdr|tga|ico|icns|obj|stl|ply|fbx|pict?|xcf|ps[db]|qoi|woff[12]?|eot)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | uniq -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -X GET,POST -pf bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -89,7 +84,6 @@ fi
 if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    # urlfinder -d "$domain_Without_Protocol" -all | grep -avE "\.(js|css|json|ico|woff|woff2|svg|ttf|eot|png|jpg|pdf)($|\s|\?|&|#|/|\.)" | qsreplace "BXSS" | grep -a "BXSS" | anew | bxss -t -pf bxssMostUsed.txt
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | anew | grep -aviE "\.(js(on)?|css|jpe?g|png|gif|bmp|tiff?|webp|heifc?|jp[2fxm]|mj2|pcx|dds|raw|dng|cr[23]|nef|a[rw]w|srf?|raf|orf|pef|rw2|svg|eps|ai|exr|hdr|tga|ico|icns|obj|stl|ply|fbx|pict?|xcf|ps[db]|qoi|woff[12]?|eot)($|\s|\?|&|#|/|\.)" | sed 's/:[0-9]\+//' | qsreplace "XSS" | grep -a "XSS" | anew | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | uniq -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -X GET,POST -pf bxssMostUsed.txt
 fi
