@@ -68,7 +68,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -X GET,POST -pf xssBlind.txt
+    echo "$domain" | bxss -t -X GET,POST -pf xssBlind.txt
 fi
 
 # bxss vulnerability
