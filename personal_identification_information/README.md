@@ -8,7 +8,7 @@ cat recon/all_extension_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|x
 ```
 ## All confidentials files
 ```
-cat recon/all_extension_urls.txt | grep -aE '\.enc|\.pgp|\.locky|\.secure|\.key|\.gpg|\.asc'
+cat recon/all_extension_urls.txt | grep -aiE '\.(enc|pgp|locky|secure|key|gpg|asc)$'
 ```
 ## All microsoft document files
 ```
