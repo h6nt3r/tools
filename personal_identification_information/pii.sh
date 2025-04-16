@@ -16,11 +16,6 @@ display_usage() {
     echo -e "${BOLD_YELLOW}Usage:${NC}"
     echo -e "${BOLD_YELLOW}    $0 -d http://example.com${NC}"
     echo -e "${BOLD_YELLOW}    $0 -l http://example.com${NC}"
-    echo -e "${RED}Required Tools:${NC}"
-    echo -e "              ${RED}
-            https://github.com/tomnomnom/anew
-            https://github.com/projectdiscovery/urlfinder
-            https://github.com/lc/gau${NC}"
     exit 0
 }
 
