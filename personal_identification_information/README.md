@@ -4,7 +4,7 @@ cat recon/all_extension_urls.txt | grep -aEi '\.pdf$' | while read -r url; do cu
 ```
 ## All backup and database files
 ```
-cat recon/all_extension_urls.txt | grep -aE '\.zip|\.tar\.gz|\.tgz|\.7z|\.rar|\.gz|\.bz2|\.xz|\.lzma|\.z|\.cab|\.arj|\.lha|\.ace|\.arc|\.iso|\.db|\.sqlite|\.sqlite3|\.db3|\.sql|\.sqlitedb|\.sdb|\.sqlite2|\.frm|\.mdb|\.accdb|\.bak|\.backup|\.old|\.sav|\.save'
+cat recon/all_extension_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accdb|bak|backup|old|sav|save)$'
 ```
 ## All confidentials files
 ```
@@ -12,14 +12,15 @@ cat recon/all_extension_urls.txt | grep -aE '\.enc|\.pgp|\.locky|\.secure|\.key|
 ```
 ## All microsoft document files
 ```
-cat recon/all_extension_urls.txt | grep -aE '\.doc|\.docx|\.dot|\.dotx|\.docm|\.dotm|\.xls|\.xlsx|\.xlt|\.xltx|\.xlsm|\.xltm|\.xlsb|\.ppt|\.pptx|\.pot|\.potx|\.pps|\.ppsx|\.pptm|\.potm|\.ppsm|\.mdb|\.accdb|\.mde|\.accde|\.adp|\.accdt|\.pub|\.puz|\.one|\.onepkg'
+cat recon/all_extension_urls.txt | grep -aiE '\.(doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?)$'
 ```
 ## All js files
 ```
-cat recon/all_extension_urls.txt | grep -aE '\config.js|\credentials.js|\secrets.js|\keys.js|\password.js|\api_keys.js|\auth_tokens.js|\access_tokens.js|\sessions.js|\authorization.js|\encryption.js|\certificates.js|\ssl_keys.js|\passphrases.js|\policies.js|\permissions.js|/privileges.js|\hashes.js|\salts.js|\nonces.js|\signetures.js|\digests.js|\tokens.js|\cookies.js|\topsecr3tdotnotlook.js'
+cat recon/all_extension_urls.txt | grep -aiE '\.(config|credentials|secrets|keys|password|api_keys|auth_tokens|access_tokens|sessions|authorization|encryption|certificates|ssl_keys|passphrases|policies|permissions|privileges|hashes|salts|nonces|signetures|digests|tokens|cookies|topsecr3tdotnotlook)\.js$'
 ```
 ## Installation
 ```
 wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/personal_identification_information/pii.sh"
 sudo chmod +x pii.sh
+./pii.sh -h
 ```
