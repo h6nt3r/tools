@@ -95,7 +95,7 @@ if [[ "$1" == "-d" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
-    sudo rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
+    rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
 
     all_urls_path=$base_dir/all_urls.txt
     all_urls_count=$(cat $base_dir/all_urls.txt | wc -l)
@@ -134,7 +134,7 @@ if [[ "$1" == "-l" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
-    sudo rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
+    rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
 
     all_urls_path=$base_dir/all_urls.txt
     all_urls_count=$(cat $base_dir/all_urls.txt | wc -l)
