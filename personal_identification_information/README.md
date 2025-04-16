@@ -1,7 +1,7 @@
 ## Installation
 ```
 wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/personal_identification_information/pii.sh"
-sudo chmod +x pii.sh
+sudo chmod +x ./pii.sh
 ./pii.sh -h
 ```
 ## Read PDF files
