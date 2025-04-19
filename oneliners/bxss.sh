@@ -43,23 +43,33 @@ fi
 
 # Check if help is requested
 if [[ "$1" == "-c" ]]; then
+    sudo apt install unzip -y
     echo "bxss=================================="
-    go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
+    wget "https://github.com/ethicalhackingplayground/bxss/releases/download/v0.0.3/bxss_Linux_x86_64.tar.gz"
+    sudo tar -xvzf bxss_Linux_x86_64.tar.gz
+    sudo mv bxss /usr/local/bin/
+    sudo chmod +x /usr/local/bin/bxss
+    bxss -h
+    sudo rm -rf ./*.md ./*.tar* ./*.zip
+    echo "urlfinder===================================="
+    wget "https://github.com/projectdiscovery/urlfinder/releases/download/v0.0.3/urlfinder_0.0.3_linux_amd64.zip"
+    unzip urlfinder_0.0.3_linux_amd64.zip
+    sudo mv urlfinder /usr/local/bin/
+    sudo chmod +x /usr/local/bin/urlfinder
+    urlfinder -h
+    sudo rm -rf ./*.md ./*.tar* ./*.zip
+    sudo rm -rf google-chrome-stable* bxssMostUsed* xssBlind* headers_for_xss*
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo apt install ./google-chrome-stable*.deb -y
     sudo apt --fix-broken install -y
     sudo apt install ./google-chrome-stable*.deb -y
-    echo "urlfinder===================================="
-    go install -v github.com/projectdiscovery/urlfinder/cmd/urlfinder@latest
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/xssBlind.txt"
+    wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/headers_for_xss.txt"
     wget "https://github.com/lc/gau/releases/download/v2.2.4/gau_2.2.4_linux_amd64.tar.gz"
     tar -xzf gau_2.2.4_linux_amd64.tar.gz
     sudo mv gau /usr/local/bin/
-    sudo rm -r gau_2.2.4_linux_amd64.tar.gz LICENSE README.md
-    sudo rm -r google-chrome-stable_current_amd64.deb.* bxssMostUsed.txt.* xssBlind.txt.*
-    sudo mv ~/gopath/bin/* /usr/local/bin/
-
+    gau -h
+    sudo rm -rf ./*.md ./*.tar* ./*.zip
     exit 0
 fi
 
@@ -76,7 +86,7 @@ if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | sort -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -hf headers_for_xss.txt -pf bxssMostUsed.txt
 fi
 
 # Multi domain
@@ -85,5 +95,5 @@ if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | sort -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sort -u | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | sed 's/:[0-9]\+//' | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -hf headers_for_xss.txt -pf bxssMostUsed.txt
 fi
