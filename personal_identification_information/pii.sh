@@ -93,7 +93,7 @@ if [[ "$1" == "-d" ]]; then
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
     rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
 
@@ -132,7 +132,7 @@ if [[ "$1" == "-l" ]]; then
     cat $base_dir/urlfinder.txt $base_dir/gau.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
     cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew $base_dir/all_extension_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
     rm -rf $base_dir/urlfinder.txt $base_dir/gau.txt
 
