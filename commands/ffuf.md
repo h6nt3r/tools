@@ -1,3 +1,10 @@
+## installation
+```
+go install -v github.com/ffuf/ffuf/v2@latest
+sudo mv go/bin/ffuf /usr/local/bin/
+sudo chmod +x /usr/local/bin/ffuf
+ffuf -h
+```
 ### SSRF 
 ```
 ffuf -w local_ports.txt -u "https://api.example.com/v2/test/test/download/?download_location=http://FUZZ"
