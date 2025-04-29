@@ -7,7 +7,7 @@ ffuf -h
 ```
 ## Juicy Content
 ```
-ffuf -w collection_payloads/content_discovery/endpoints.txt -u "https://example/FUZZ" -fs 0 -c -mc 200 -fr false -rate 10 -t 10
+ffuf -w collection_payloads/content_discovery/endpoints.txt -u "https://example/FUZZ" -fs 0 -c -mc 200 -fr false -rate 10 -t 10 -v
 ```
 ### SSRF 
 ```
