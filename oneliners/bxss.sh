@@ -58,7 +58,7 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/urlfinder
     urlfinder -h
     sudo rm -rf ./*.md ./*.tar* ./*.zip
-    sudo rm -rf google-chrome-stable* bxssMostUsed* xssBlind* headers_for_xss*
+    sudo rm -rf google-chrome-stable* bxssMostUsed.txt* xssBlind.txt* headers_for_xss.txt*
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo apt --fix-broken install -y
     sudo apt install ./google-chrome-stable*.deb -y
