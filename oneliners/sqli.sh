@@ -34,7 +34,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls")
+    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls" "ghauri")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
