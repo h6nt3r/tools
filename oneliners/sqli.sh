@@ -166,7 +166,7 @@ if [[ "$1" == "-l" && "$3" == "-t" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/sublist3r.txt $base_dir/subfinder.txt | anew | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    cat $base_dir/subfinder.txt | anew | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
