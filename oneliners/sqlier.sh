@@ -106,6 +106,7 @@ if [[ "$1" == "-c" ]]; then
     sudo python3 setup.py install
     cd
     ghauri -h
+    cd sqlier
 
     echo "waybackurls=================================="
     wget "https://github.com/tomnomnom/waybackurls/releases/download/v0.1.0/waybackurls-linux-amd64-0.1.0.tgz"
