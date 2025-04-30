@@ -22,10 +22,10 @@ sudo apt --fix-broken install -y
 
 ### SQLI.sh install
 ```
-wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/sqli.sh"
-sudo chmod +x ./sqli.sh
-./sqli.sh -h
+wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/sqlier.sh"
+sudo chmod +x ./sqlier.sh
+./sqlier.sh -h
 ```
 ```
-./sqli.sh -l "testphp.vulnweb.com" -e
+./sqlier.sh -l "testphp.vulnweb.com" -t
 ```
