@@ -257,7 +257,9 @@ if [[ "$1" == "-l" && "$3" == "-all" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/subfinder.txt | anew | httpx -sc -td | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+
+    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
@@ -284,7 +286,9 @@ if [[ "$1" == "-l" && "$3" == "-t" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/subfinder.txt | anew | httpx -sc -td | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+    
+    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
@@ -312,7 +316,9 @@ if [[ "$1" == "-l" && "$3" == "-b" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/subfinder.txt | anew | httpx -sc -td | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+    
+    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
@@ -339,7 +345,9 @@ if [[ "$1" == "-l" && "$3" == "-e" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/subfinder.txt | anew | httpx -sc -td | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+    
+    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
@@ -366,7 +374,9 @@ if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
 
     subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
 
-    cat $base_dir/subfinder.txt | anew | httpx -sc -td | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+    
+    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
 
     urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
 
