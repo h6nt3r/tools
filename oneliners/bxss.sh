@@ -62,9 +62,9 @@ if [[ "$1" == "-c" ]]; then
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo apt --fix-broken install -y
     sudo apt install ./google-chrome-stable*.deb -y
-    wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/bxssMostUsed.txt"
-    wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/xssBlind.txt"
-    wget "https://raw.githubusercontent.com/h6nt3r/payloads/refs/heads/main/xss/headers_for_xss.txt"
+    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/bxssMostUsed.txt"
+    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xssBlind.txt"
+    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/headers_for_xss.txt"
     wget "https://github.com/lc/gau/releases/download/v2.2.4/gau_2.2.4_linux_amd64.tar.gz"
     tar -xzf gau_2.2.4_linux_amd64.tar.gz
     sudo mv gau /usr/local/bin/
