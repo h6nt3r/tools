@@ -105,10 +105,9 @@ if [[ "$1" == "-c" ]]; then
     uro -h
 
     echo "Downloading payloads===================================="
-    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/bxssMostUsed.txt"
+    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/blindxssreport.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xssBlind.txt"
-    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/headers_for_xss.txt"
-    sudo rm -rf bxssMostUsed.txt.* xssBlind.txt.* headers_for_xss.txt.*
+    sudo rm -rf blindxssreport.txt.* xssBlind.txt.*
 
     sudo rm -rf bxsser
     
@@ -120,7 +119,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -t -X GET,POST -pf xssBlind.txt
+    echo "$domain" | bxss -t -X GET,POST -pf blindxssreport.txt
     exit 0
 fi
 
@@ -129,7 +128,7 @@ if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -hf headers_for_xss.txt -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf blindxssreport.txt
     exit 0
 fi
 
@@ -139,6 +138,6 @@ if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -hf headers_for_xss.txt -pf bxssMostUsed.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf blindxssreport.txt
     exit 0
 fi
