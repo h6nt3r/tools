@@ -149,7 +149,7 @@ if [[ "$1" == "-d" && "$3" == "-all" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -172,7 +172,7 @@ if [[ "$1" == "-d" && "$3" == "-e" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -195,7 +195,7 @@ if [[ "$1" == "-d" && "$3" == "-b" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -218,7 +218,7 @@ if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -242,7 +242,7 @@ if [[ "$1" == "-d" && "$3" == "-t" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -271,7 +271,7 @@ if [[ "$1" == "-l" && "$3" == "-all" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -300,7 +300,7 @@ if [[ "$1" == "-l" && "$3" == "-t" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -330,7 +330,7 @@ if [[ "$1" == "-l" && "$3" == "-b" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -359,7 +359,7 @@ if [[ "$1" == "-l" && "$3" == "-e" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
@@ -388,6 +388,6 @@ if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
 
-    ghauri -m $base_dir/all_params_urls.txt --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
