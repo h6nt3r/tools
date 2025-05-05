@@ -27,7 +27,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "bxsser" "urlfinder" "gau" "waybackurls" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip")
+    tools=( "bxsser" "urlfinder" "gau" "waybackurls" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip" "reflection")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -114,6 +114,16 @@ if [[ "$1" == "-c" ]]; then
     sudo chmod +x /usr/local/bin/waybackurls
     sudo rm -rf ./*
     waybackurls -h
+    cd
+
+    cd bxsser2
+    cd /opt/ && sudo git clone https://github.com/h6nt3r/reflection.git
+    cd
+    sudo chmod +x /opt/reflection/*.py
+    sudo ln -sf /opt/reflection/reflector.py /usr/local/bin/reflection
+    sudo apt install dos2unix -y
+    sudo dos2unix /opt/reflection/reflector.py
+    reflection -h
     cd
 
     echo "uro===================================="
