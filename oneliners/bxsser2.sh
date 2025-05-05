@@ -27,7 +27,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "bxsser" "urlfinder" "gau" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip")
+    tools=( "bxsser" "urlfinder" "gau" "waybackurls" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -104,6 +104,16 @@ if [[ "$1" == "-c" ]]; then
     sudo mv katana /usr/local/bin/
     sudo rm -rf ./*
     katana -h
+    cd
+
+    cd bxsser2
+    echo "waybackurls=================================="
+    wget "https://github.com/tomnomnom/waybackurls/releases/download/v0.1.0/waybackurls-linux-amd64-0.1.0.tgz"
+    sudo tar -xzvf waybackurls-linux-amd64-0.1.0.tgz
+    sudo mv waybackurls /usr/local/bin/
+    sudo chmod +x /usr/local/bin/waybackurls
+    sudo rm -rf ./*
+    waybackurls -h
     cd
 
     echo "uro===================================="
