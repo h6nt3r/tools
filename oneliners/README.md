@@ -1,8 +1,8 @@
 ## Blind XSS install
 ```
-wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bxsser.sh"
-sudo chmod +x ./bxsser.sh
-./bxsser.sh -h
+wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bxsser2.sh"
+sudo chmod +x ./bxsser2.sh
+./bxsser2.sh -h
 ```
 ## usage
 ```
