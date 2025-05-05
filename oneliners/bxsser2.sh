@@ -58,8 +58,7 @@ if [[ "$1" == "-c" ]]; then
     cd
     sudo ln -sf /opt/bxsser/bxsser.py /usr/local/bin/bxsser
     bxsser -h
-    sudo rm -rf ./*
-    cd
+
 
     cd bxsser2
     echo "urlfinder===================================="
