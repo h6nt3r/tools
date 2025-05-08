@@ -170,11 +170,7 @@ if [ "$1" == "-d" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    reflection -f $base_dir/all_urls.txt -o $base_dir/reflected_params.txt
-
-    cat $base_dir/reflected_params.txt | sed 's/RXSS/*/g' | sort -u | tee $base_dir/ready_for_bxsser.txt
-
-    bxsser -f $base_dir/ready_for_bxsser.txt -p blindxssreport.txt -t 4
+    bxsser -f $base_dir/all_urls.txt -p blindxssreport.txt
 
     chmod -R 777 $main_dir
     exit 0
@@ -184,7 +180,7 @@ fi
 # Multi domain
 # bxss vulnerability
 if [ "$1" == "-l" ]; then
-    echo "Single Domain==============="
+    echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
     main_dir="bug_bounty/$domain_Without_Protocol"
     base_dir="$main_dir/Multi_domain/blindxss"
@@ -201,11 +197,7 @@ if [ "$1" == "-l" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    reflection -f $base_dir/all_urls.txt -o $base_dir/reflected_params.txt
-
-    cat $base_dir/reflected_params.txt | sed 's/RXSS/*/g' | sort -u | tee $base_dir/ready_for_bxsser.txt
-
-    bxsser -f $base_dir/ready_for_bxsser.txt -p blindxssreport.txt -t 4
+    bxsser -f $base_dir/all_urls.txt -p blindxssreport.txt
 
     chmod -R 777 $main_dir
     exit 0
