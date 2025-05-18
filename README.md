@@ -7,3 +7,6 @@ sudo chmod +x ./jshelper.sh
 ```
 ./jshelper.sh -u "http://rest.vulnweb.com/docs/main.js"
 ```
+```
+./jshelper.sh -f ~/bug_bounty/vulnweb.com/multi_domain/recon/all_urls.txt
+```
