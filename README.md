@@ -4,7 +4,6 @@ sudo wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/jshelp
 sudo chmod +x ./jshelper.sh
 ./jshelper.sh -h
 ```
-##### usage
 ```
 ./jshelper.sh -u "http://rest.vulnweb.com/docs/main.js"
 ```
