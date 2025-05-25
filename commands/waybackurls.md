@@ -1,4 +1,4 @@
-## Singke domain url find
+## Single domain url find
 ```
 waybackurls -no-subs "vulnweb.com" | tee vulnweb.com.txt
 ```
