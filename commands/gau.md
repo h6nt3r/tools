@@ -2,3 +2,7 @@
 ```
 gau "vulnweb.com" --providers wayback,commoncrawl,otx,urlscan --verbose --o gau.txt
 ```
+## Domain with sub-domain url find
+```
+gau "vulnweb.com" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o gau.txt
+```
