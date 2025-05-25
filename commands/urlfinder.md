@@ -1,4 +1,8 @@
-## single domain link find
+## Single domain url find
 ```
 urlfinder -all -d "vulnweb.com" -fs fqdn -o urlfinder.txt
+```
+## Domain with sub-domain url find
+```
+urlfinder -all -d "vulnweb.com" -o urlfinder.txt
 ```
