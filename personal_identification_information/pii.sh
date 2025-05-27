@@ -21,7 +21,7 @@ display_usage() {
 
 # Function to check installed tools
 check_tools() {
-    tools=("gau" "urlfinder" "anew" "pdftotext" "unfurl" "subfinder" "subdominator" "katana")
+    tools=("gau" "urlfinder" "anew" "pdftotext" "unfurl" "subfinder" "subdominator" "katana" "waybackurls" "waymore")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -149,8 +149,12 @@ if [[ "$1" == "-d" ]]; then
 
     gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
-    cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew $base_dir/all_extension_urls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
+
+    waymore -i "$domain_Without_Protocol" -n -mode U -xcc -t 10 -oU $base_dir/waymore.txt
+
+    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/katana.txt $base_dir/waybackurls.txt $base_dir/waymore.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
+    cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json|eml|txt)$' | anew $base_dir/all_extension_urls.txt
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
@@ -185,26 +189,18 @@ if [[ "$1" == "-l" ]]; then
 
     echo "Multi Domain Url Spidering"
 
-    subdominator -d "$domain_Without_Protocol" -all -V -o $base_dir/subdominator.txt
+    urlfinder -all -d "$domain_Without_Protocol" -v -o $base_dir/urlfinder.txt
 
-    sublist3r -d "$domain_Without_Protocol" -e baidu,yahoo,google,bing,ask,netcraft,virustotal,threatcrowd,crtsh,passivedns -v -o $base_dir/sublist3r.txt
+    katana -u "$domain_Without_Protocol" -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
-    cat $base_dir/sublist3r.txt $base_dir/subfinder.txt $base_dir/subdominator.txt | anew | tee $base_dir/all_subdomains.txt
+    waymore -i "$domain_Without_Protocol" -mode U -xcc -t 10 -oU $base_dir/waymore.txt
 
-
-    httpx -l $base_dir/all_subdomains.txt -t 100 -mc 200 -random-agent -o $base_dir/httpx_full_detail_subdomains.txt
-
-    urlfinder -all -list $base_dir/httpx_full_detail_subdomains.txt -fs fqdn -o $base_dir/urlfinder.txt
-
-    katana -list $base_dir/httpx_full_detail_subdomains.txt -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
-
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
-    cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json)$' | anew $base_dir/all_extension_urls.txt
+    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/katana.txt $base_dir/waybackurls.txt $base_dir/waymore.txt | sed 's/:[0-9]\+//' | anew $base_dir/all_urls.txt
+    cat $base_dir/all_urls.txt | grep -aiE '\.(zip|tar\.gz|tgz|7z|rar|gz|bz2|xz|lzma|z|cab|arj|lha|ace|arc|iso|db|sqlite|sqlite3|db3|sql|sqlitedb|sdb|sqlite2|frm|mdb|accd[be]|adp|accdt|pub|puz|one(pkg)?|doc[xm]?|dot[xm]?|xls[xmb]?|xlt[xm]?|ppt[xm]?|pot[xm]?|pps[xm]?|pdf|bak|backup|old|sav|save|env|txt|js|json|eml|txt)$' | anew $base_dir/all_extension_urls.txt
 
     cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_urls_params.txt
 
