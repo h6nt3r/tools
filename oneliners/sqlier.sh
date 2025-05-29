@@ -34,7 +34,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls" "ghauri")
+    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls" "ghauri" "iconv")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -141,13 +141,15 @@ if [[ "$1" == "-d" && "$3" == "-all" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -164,13 +166,15 @@ if [[ "$1" == "-d" && "$3" == "-e" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -187,13 +191,15 @@ if [[ "$1" == "-d" && "$3" == "-b" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -210,13 +216,15 @@ if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -234,13 +242,15 @@ if [[ "$1" == "-d" && "$3" == "-t" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
 
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
+    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -255,21 +265,17 @@ if [[ "$1" == "-l" && "$3" == "-all" ]]; then
 
     mkdir -p $main_dir
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
 
-    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
-
-    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
-
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -284,21 +290,17 @@ if [[ "$1" == "-l" && "$3" == "-t" ]]; then
 
     mkdir -p $main_dir
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
 
-    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
-    
-    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
-
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -314,21 +316,17 @@ if [[ "$1" == "-l" && "$3" == "-b" ]]; then
 
     mkdir -p $main_dir
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
 
-    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
-    
-    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
-
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -343,21 +341,17 @@ if [[ "$1" == "-l" && "$3" == "-e" ]]; then
 
     mkdir -p $main_dir
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
 
-    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
-    
-    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
-
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -372,21 +366,17 @@ if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
 
     mkdir -p $main_dir
 
-    subfinder -d "$domain_Without_Protocol" -recursive -all -v -o $base_dir/subfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
 
-    httpx -l $base_dir/subfinder.txt -sc -td -server -o $base_dir/httpx.txt
-    
-    cat $base_dir/httpx.txt | grep -Eia "Apache|Nginx|PHP|ASP|ASPX|IIS|JSP" | awk '{print $1}' | sed 's,https\?://,,g' | anew | tee $base_dir/all_subdomains.txt
+    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
-    urlfinder -all -list "$base_dir/all_subdomains.txt" -fs fqdn -o $base_dir/urlfinder.txt
-
-    cat $base_dir/all_subdomains.txt | gau --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    cat $base_dir/all_subdomains.txt | waybackurls -no-subs | tee $base_dir/waybackurls.txt
+    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | grep -Eia "\.(php|asp|aspx|cfm|jsp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
+
+    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
     exit 0
