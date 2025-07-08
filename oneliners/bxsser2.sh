@@ -168,7 +168,7 @@ if [ "$1" == "-d" ]; then
 
     katana -u "$domain_Without_Protocol" -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
 
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | iconv -f ISO-8859-1 -t UTF-8 | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
+    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
     bxsser -f $base_dir/all_urls.txt -p blindxssreport.txt
 
@@ -187,7 +187,7 @@ if [ "$1" == "-l" ]; then
 
     mkdir -p $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -t 20 -o $base_dir/urlfinder.txt
 
     cat "$domain_Without_Protocol" | gau --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
@@ -197,7 +197,7 @@ if [ "$1" == "-l" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | iconv -f ISO-8859-1 -t UTF-8 | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    bxsser -f $base_dir/all_urls.txt -p blindxssreport.txt
+    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf blindxssreport.txt
 
     chmod -R 777 $main_dir
     exit 0
