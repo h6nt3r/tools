@@ -27,7 +27,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=( "bxsser" "urlfinder" "gau" "waybackurls" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip" "reflection")
+    tools=( "bxss" "urlfinder" "gau" "waybackurls" "google-chrome" "uro" "unfurl" "xargs" "katana" "unzip")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -49,15 +49,8 @@ fi
 if [[ "$1" == "-c" ]]; then
     mkdir -p --mode=777 bxsser2
 
-    cd bxsser2
     sudo apt install unzip -y
-    echo "bxsser=================================="
-    cd /opt/ && sudo git clone https://github.com/h6nt3r/bxsser.git && cd bxsser/
-    sudo chmod +x ./*
-    sudo pip3 install -r requirements.txt --break-system-packages
-    cd
-    sudo ln -sf /opt/bxsser/bxsser.py /usr/local/bin/bxsser
-    bxsser -h
+    go install -v github.com/ethicalhackingplayground/bxss/v2/cmd/bxss@latest
 
 
     cd bxsser2
@@ -116,16 +109,6 @@ if [[ "$1" == "-c" ]]; then
     waybackurls -h
     cd
 
-    cd bxsser2
-    cd /opt/ && sudo git clone https://github.com/h6nt3r/reflection.git
-    cd
-    sudo chmod +x /opt/reflection/*.py
-    sudo ln -sf /opt/reflection/reflector.py /usr/local/bin/reflection
-    sudo apt install dos2unix -y
-    sudo dos2unix /opt/reflection/reflector.py
-    reflection -h
-    cd
-
     echo "uro===================================="
     cd /opt/ && sudo git clone https://github.com/s0md3v/uro.git && cd uro/
     sudo chmod +x ./*
@@ -147,7 +130,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single url==============="
     domain=$2
-    bxsser -u "$domain" -p blindxssreport.txt -t 4
+    echo "$domain" | bxss -t -X GET,POST -pf blindxssreport.txt
     exit 0
 fi
 
@@ -170,7 +153,7 @@ if [ "$1" == "-d" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    bxsser -f $base_dir/all_urls.txt -p blindxssreport.txt
+    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf blindxssreport.txt
 
     chmod -R 777 $main_dir
     exit 0
