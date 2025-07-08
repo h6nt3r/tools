@@ -117,8 +117,8 @@ if [[ "$1" == "-c" ]]; then
     uro -h
 
     echo "Downloading payloads===================================="
+    sudo rm -rf blindxssreport.*
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/blindxssreport.txt"
-    sudo rm -rf blindxssreport.txt.*
 
     sudo rm -rf bxsser2
     
@@ -170,7 +170,7 @@ if [ "$1" == "-l" ]; then
 
     mkdir -p $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" -t 20 -o $base_dir/urlfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -timeout 20 -o $base_dir/urlfinder.txt
 
     cat "$domain_Without_Protocol" | gau --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
 
