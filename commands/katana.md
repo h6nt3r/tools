@@ -15,3 +15,7 @@ katana -u "vulnweb.com" -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps 
 ```
 katana -u "vulnweb.com" -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o katana.txt
 ```
+## Specific domains url find
+```
+katana -list domains.txt -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o katana.txt
+```
