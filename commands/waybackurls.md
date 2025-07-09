@@ -8,5 +8,5 @@ waybackurls "vulnweb.com" | tee waybackurls.txt
 ```
 ## Specific domains url find
 ```
-cat domains.txt | waybackurls -no-subs | tee waybackurls.txt
+cat domains.txt | xargs -I {} sh -c 'waybackurls -no-subs {}' | tee waybackurls.txt
 ```
