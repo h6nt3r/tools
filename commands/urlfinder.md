@@ -6,3 +6,7 @@ urlfinder -all -d "vulnweb.com" -fs fqdn -o urlfinder.txt
 ```
 urlfinder -all -d "vulnweb.com" -o urlfinder.txt
 ```
+## Specific domains url find
+```
+urlfinder -list domains.txt -fs fqdn -duc -v -o urlfinder.txt
+```
