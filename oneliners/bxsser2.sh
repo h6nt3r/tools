@@ -117,8 +117,8 @@ if [[ "$1" == "-c" ]]; then
     uro -h
 
     echo "Downloading payloads===================================="
-    sudo rm -rf blindxssreport.*
-    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/blindxssreport.txt"
+    sudo rm -rf bxssMostUsed.*
+    wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/bxssMostUsed.txt"
 
     sudo rm -rf bxsser2
     
@@ -130,7 +130,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single url==============="
     domain=$2
-    echo "$domain" | bxss -t -X GET,POST -pf blindxssreport.txt
+    echo "$domain" | bxss -t -X GET,POST -pf bxssMostUsed.txt
     exit 0
 fi
 
@@ -153,7 +153,7 @@ if [ "$1" == "-d" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf blindxssreport.txt
+    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt
 
     chmod -R 777 $main_dir
     exit 0
@@ -180,7 +180,7 @@ if [ "$1" == "-l" ]; then
 
     cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | iconv -f ISO-8859-1 -t UTF-8 | uro | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf blindxssreport.txt
+    cat $base_dir/all_urls.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt
 
     chmod -R 777 $main_dir
     exit 0
