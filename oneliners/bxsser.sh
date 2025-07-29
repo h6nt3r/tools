@@ -105,10 +105,10 @@ if [[ "$1" == "-c" ]]; then
     uro -h
 
     echo "Downloading payloads===================================="
+    sudo rm -rf blindxssreport.* xssBlind.*
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/blindxssreport.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xss0r_blinds.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xssBlind.txt"
-    sudo rm -rf blindxssreport.txt.* xssBlind.txt.*
 
     sudo rm -rf bxsser
     
@@ -120,7 +120,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -t -X GET,POST -pf xssBlind.txt
+    echo "$domain" | bxss -t -X GET,POST -pf blindxssreport.txt
     exit 0
 fi
 
