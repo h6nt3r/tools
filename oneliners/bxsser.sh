@@ -72,8 +72,9 @@ if [[ "$1" == "-c" ]]; then
 
     cd bxsser
     echo "google-chrome===================================="
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     sudo apt --fix-broken install -y
+    sudo apt update --fix-missing -y
     sudo apt install ./google-chrome-stable*.deb -y
     sudo rm -rf ./*
     cd
@@ -105,7 +106,7 @@ if [[ "$1" == "-c" ]]; then
     uro -h
 
     echo "Downloading payloads===================================="
-    sudo rm -rf blindxssreport.* xssBlind.*
+    sudo rm -rf blindxssreport.* xssBlind.* xss0r_blinds.*
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/blindxssreport.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xss0r_blinds.txt"
     wget "https://raw.githubusercontent.com/h6nt3r/collection_payloads/refs/heads/main/xss/xssBlind.txt"
