@@ -128,7 +128,7 @@ if [ "$1" == "-d" ]; then
     echo "Single Domain==============="
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt -hf headers_for_xss.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -fs fqdn -all && gau {} --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml|gif)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt -hf headers_for_xss.txt
     exit 0
 fi
 
@@ -138,6 +138,6 @@ if [ "$1" == "-l" ]; then
     echo "Multi Domain==============="
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
 
-    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt -hf headers_for_xss.txt
+    echo "$domain_Without_Protocol" | xargs -I {} sh -c 'urlfinder -d {} -all && gau {} --subs --providers wayback,commoncrawl,otx,urlscan' | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|xml|gif)($|\s|\?|&|#|/|\.)" | sort -u | tee $domain_Without_Protocol.txt;cat $domain_Without_Protocol.txt | bxss -t -X GET,POST -pf bxssMostUsed.txt -hf headers_for_xss.txt
     exit 0
 fi
