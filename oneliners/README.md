@@ -1,3 +1,17 @@
+## bx
+```
+wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bx.sh"
+sudo chmod +x ./bx.sh
+./bx.sh -h
+```
+
+```
+./bx.sh -l "target.com" -u "hnterx"
+```
+```
+./bx.sh -d "target.com" -u "hnterx"
+```
+
 ## Blind XSS install
 ```
 wget "https://raw.githubusercontent.com/h6nt3r/tools/refs/heads/main/oneliners/bxsser.sh"
