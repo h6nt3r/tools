@@ -165,7 +165,7 @@ if [ "$1" == "-d" ]; then
 
     katana -u "$domain_Without_Protocol" -fs fqdn -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
 
-    cat $base_dir/urlfinder.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|js|json|pdf|xml|gif)($|\s|\?|&|#|/|\.)" | anew>$base_dir/all_urls.txt
+    cat $base_dir/urlfinder.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew>$base_dir/all_urls.txt
 
     sudo rm -rf $base_dir/urlfinder.txt $base_dir/katana.txt
 
@@ -191,7 +191,7 @@ if [ "$1" == "-l" ]; then
 
     katana -list $base_dir/httpx.txt -rl 170 -timeout 5 -retry 2 -aff -d 4 -duc -ps -pss waybackarchive,commoncrawl,alienvault -o $base_dir/katana.txt
 
-    cat $base_dir/urlfinder.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | grep -aiE "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|js|json|pdf|xml|gif)($|\s|\?|&|#|/|\.)" | anew>$base_dir/all_urls.txt
+    cat $base_dir/urlfinder.txt $base_dir/katana.txt | sed 's/:[0-9]\+//' | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew>$base_dir/all_urls.txt
 
     sudo rm -rf $base_dir/subfinder.txt $base_dir/httpx.txt $base_dir/urlfinder.txt $base_dir/katana.txt
 
