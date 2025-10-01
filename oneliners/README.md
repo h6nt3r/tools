@@ -32,5 +32,8 @@ sudo chmod +x ./sqlier.sh
 ./sqlier.sh -h
 ```
 ```
-./sqlier.sh -l "testphp.vulnweb.com" -t
+./sqlier.sh -l "vulnweb.com" -tech "T"
+```
+```
+./sqlier.sh -d "vulnweb.com" -tech "T"
 ```
