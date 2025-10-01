@@ -107,7 +107,9 @@ if [[ "$1" == "-d" && "$3" == "-tech" ]]; then
 
     sudo mkdir -p --mode=777 $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
+    urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/all_urls.txt
+
+    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -122,7 +124,9 @@ if [[ "$1" == "-l" && "$3" == "-tech" ]]; then
 
     sudo mkdir -p --mode=777 $main_dir
 
-    urlfinder -all -d "$domain_Without_Protocol" | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
+    urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/all_urls.txt
+    
+    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
