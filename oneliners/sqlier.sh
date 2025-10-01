@@ -33,7 +33,7 @@ fi
 
 # Function to check installed tools
 check_tools() {
-    tools=("unfurl" "anew" "urlfinder" "ghauri" "iconv")
+    tools=("unfurl" "anew" "urlfinder" "ghauri" "iconv" "httpx")
 
     echo "Checking required tools:"
     for tool in "${tools[@]}"; do
@@ -92,6 +92,16 @@ if [[ "$1" == "-c" ]]; then
     sudo rm -rf ./*
     unfurl -h
 
+    cd sqlier
+    echo "httpx=================================="
+    wget "https://github.com/projectdiscovery/httpx/releases/download/v1.7.1/httpx_1.7.1_linux_amd64.zip"
+    sudo unzip httpx_1.7.1_linux_amd64.zip
+    sudo mv httpx /usr/local/bin/
+    sudo chmod +x /usr/local/bin/httpx
+    sudo rm -rf ./*
+    httpx -h
+    cd
+
     cd
     sudo rm -rf sqlier
     exit 0
@@ -109,7 +119,7 @@ if [[ "$1" == "-d" && "$3" == "-tech" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -fs fqdn -o $base_dir/all_urls.txt
 
-    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | httpx -mc 200 -nc -duc | anew $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
@@ -126,7 +136,7 @@ if [[ "$1" == "-l" && "$3" == "-tech" ]]; then
 
     urlfinder -all -d "$domain_Without_Protocol" -o $base_dir/all_urls.txt
     
-    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | anew $base_dir/all_params_urls.txt
+    cat $base_dir/all_urls.txt | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|cfm)' | httpx -mc 200 -nc -duc | anew $base_dir/all_params_urls.txt
 
     ghauri -m $base_dir/all_params_urls.txt --ignore-code=401 --level=3 --technique=$4 --random-agent --confirm --force-ssl --dbs --batch
     exit 0
