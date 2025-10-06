@@ -8,6 +8,13 @@ sudo python3 setup.py install
 cd
 ghauri -h
 ```
+### sqlmap
+```
+cd /opt/ && sudo git clone https://github.com/sqlmapproject/sqlmap.git
+cd
+sudo ln -sf /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
+sqlmap -h
+```
 ### Dirsearch
 ```
 cd /opt/ && sudo git clone https://github.com/maurosoria/dirsearch.git
