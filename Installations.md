@@ -17,3 +17,10 @@ sudo python3 setup.py install
 cd
 dirsearch -h
 ```
+### Ffuf
+```
+go install -v github.com/ffuf/ffuf/v2@latest
+sudo mv go/bin/ffuf /usr/local/bin/
+sudo chmod +x /usr/local/bin/ffuf
+ffuf -h
+```
