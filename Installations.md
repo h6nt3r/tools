@@ -39,3 +39,9 @@ sudo mv katana /usr/local/bin/
 sudo chmod +x /usr/local/bin/katana
 katana -h
 ```
+### wpscan
+```
+sudo apt install build-essential libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev -y
+sudo apt install ruby-full -y
+sudo gem install wpscan
+```
