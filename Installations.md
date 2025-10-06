@@ -24,3 +24,11 @@ sudo mv go/bin/ffuf /usr/local/bin/
 sudo chmod +x /usr/local/bin/ffuf
 ffuf -h
 ```
+### Katana 1.1.0
+```
+wget "https://github.com/projectdiscovery/katana/releases/download/v1.1.0/katana_1.1.0_linux_amd64.zip"
+unzip katana_1.1.0_linux_amd64.zip
+sudo mv katana /usr/local/bin/
+sudo chmod +x /usr/local/bin/katana
+katana -h
+```
