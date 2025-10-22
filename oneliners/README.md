@@ -1,4 +1,4 @@
-## Email/Gmail
+## Email/Gmail Extractor
 ```
 subfinder -d "vulnweb.com" -all -recursive | httpx -mc 200 -duc -silent | sed -E 's,https?://(www\.)?,,' | wurls -s | iconv -f ISO-8859-1 -t UTF-8 -c | grep -Eoi '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' \
 | tr '[:upper:]' '[:lower:]' \
