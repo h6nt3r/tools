@@ -7,3 +7,14 @@ sudo nano /etc/lightdm/lightdm.conf
 ```
 * Replace `#autologin-user=` to `autologin-user= h6nt3r`
 * Press `Ctrl+x` then `y` then `Enter`
+
+## Error mounting
+```
+sudo apt install nfs-common -y
+```
+```
+sudo apt install cifs-utils -y
+```
+```
+sudo ntfsfix -d /dev/sdb1
+```
