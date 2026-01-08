@@ -53,7 +53,7 @@ if [[ "$1" == "-c" ]]; then
     cd bxsser
     sudo apt install unzip -y
     echo "bxss=================================="
-    wget "https://github.com/ethicalhackingplayground/bxss/releases/download/v0.0.3/bxss_Linux_x86_64.tar.gz"
+    sudo wget "https://github.com/ethicalhackingplayground/bxss/releases/download/v0.0.2/bxss_Linux_x86_64.tar.gz"
     sudo tar -xvzf bxss_Linux_x86_64.tar.gz
     sudo mv bxss /usr/local/bin/
     sudo chmod +x /usr/local/bin/bxss
@@ -147,7 +147,7 @@ fi
 if [ "$1" == "-u" ]; then
     echo "Single Domain==============="
     domain=$2
-    echo "$domain" | bxss -t -X GET -pf xssBlind.txt
+    echo "$domain" | bxss -parameters -payloadFile xssBlind.txt
     exit 0
 fi
 
@@ -169,7 +169,7 @@ if [ "$1" == "-d" ]; then
 
     sudo rm -rf $base_dir/urlfinder.txt $base_dir/katana.txt
 
-    cat $base_dir/all_urls.txt | bxss -t -X GET -pf xssBlind.txt
+    cat $base_dir/all_urls.txt | bxss -parameters -payloadFile xssBlind.txt
     exit 0
 fi
 
@@ -195,6 +195,6 @@ if [ "$1" == "-l" ]; then
 
     sudo rm -rf $base_dir/subfinder.txt $base_dir/httpx.txt $base_dir/urlfinder.txt $base_dir/katana.txt
 
-    cat $base_dir/all_urls.txt | bxss -t -X GET -pf xssBlind.txt
+    cat $base_dir/all_urls.txt | bxss -parameters -payloadFile xssBlind.txt
     exit 0
 fi
